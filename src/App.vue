@@ -52,7 +52,4 @@
   .fade-leave-active {
     transition: all 0.3s ease;
   }
-
-  
-
 </style>
