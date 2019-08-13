@@ -6,6 +6,7 @@ import Shopcart from './components/tabbar/Shopcart.vue'
 import Search from './components/tabbar/Search.vue'
 
 import News from './components/news/NewsList.vue'
+import NewsInfo from './components/news/NewsInfo.vue'
 
 const router = new VueRouter({
     routes: [
@@ -15,6 +16,7 @@ const router = new VueRouter({
         { path: '/shopcart', component: Shopcart },
         { path: '/search', component: Search },
         { path: '/home/newslist', component: News },
+        { path: '/home/newslist/newsinfo/list:id', component: NewsInfo },
     ],
     linkActiveClass: 'mui-active'
 })

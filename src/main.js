@@ -9,8 +9,8 @@ Vue.use(VueRouter)
 import moment from 'moment'
 // 定义 全局 过滤器
 
-Vue.filter('dataFormat', function(dataStr){
-  return moment(dataStr).format('YYYY-MM-DD hh:mm:ss')
+Vue.filter('dataFormat', function(dataStr, pattern="YYYY-MM-DD hh:mm:ss"){
+  return moment(dataStr).format(pattern)
 })
 
 import axios from 'axios' // 导入 axios 模块
@@ -20,11 +20,12 @@ Vue.use(VueAxios, axios)
 import App from './App.vue'
 
 // 按需引入 mint-ui
-import { Header, Swipe, SwipeItem } from 'mint-ui'
+import { Header, Swipe, SwipeItem, Button } from 'mint-ui'
 import 'mint-ui/lib/style.css'
 Vue.component(Header.name, Header)
 Vue.component(Swipe.name, Swipe)
 Vue.component(SwipeItem.name, SwipeItem)
+Vue.component(Button.name, Button)
 
 // 按需引入 MUI
 import './lib/dist/css/mui.min.css'
