@@ -5,10 +5,12 @@
             <h4>发表评论</h4>
         </div>
         <div class="content">
-            <textarea name="" id="" maxlength="150" class="txtarea" placeholder="请输入你要发表的评论"></textarea>
+            <textarea name="" id="" maxlength="150" class="txtarea" placeholder="请输入你要发表的评论" v-model="commentsContent">
+
+            </textarea>
         </div>
         <div class="button">
-            <mt-button type="primary" size="large">评论</mt-button>
+            <mt-button type="primary" size="large" @click.native="postComment">评论</mt-button>
         </div>
         <div class="list">
             <div class="cmt-list" v-for="(item, index) in cmtList" :key="index">
@@ -16,7 +18,7 @@
                     第{{ index + 1 }}楼&nbsp;&nbsp;用户：{{ item.user_name }}&nbsp;&nbsp;发表时间：{{ item.add_time | dataFormat }}
                 </div>
                 <div class="cmt-content">
-                    {{ item.content === ("undefined"||"''") ? "该用户的评论被官方菌吃掉啦" : item.content }}
+                    {{ (item.content === "undefined")||(item.content === "") ? "该用户的评论被官方菌吃掉啦" : item.content }}
                 </div>
             </div>
 
@@ -31,7 +33,8 @@ export default {
     data(){
         return {
             pageindex: 1,
-            cmtList: []
+            cmtList: [],
+            commentsContent: ''
         }
     },
     props: [ 'artid' ],
@@ -65,6 +68,35 @@ export default {
         loading(){
             this.pageindex += 1;
             this.getCommentList()
+        },
+        postComment(){
+            // 校验 commentContent 内容是否为空
+            if(this.commentsContent.trim().length === 0){
+                return Toast({
+                    message: "评论内容不能为空",
+                    duration: 2000
+                })
+            }
+            /**
+             * 发表评论的 url 地址：http://www.liulongbin.top:3005/api/postcomment/:artid
+             * 请求方式 Post
+             * 返回数据 JSON 格式 
+             * status: 0 => 成功
+             */
+            const _postUrl = 'api/postcomment/'+ this.$route.params.id +''
+            var cmtcon = this.commentsContent;
+            var cmtlist = this.cmtList;
+            this.axios.post(_postUrl, {content: this.commentsContent.trim()}).then(function(response){
+                if(response.data.status === 0){
+                    var cmt = {
+                        user_name: "匿名用户",
+                        add_time: Date.now(),
+                        content: cmtcon
+                    };
+                    cmtlist.unshift(cmt);
+                    cmtcon = ''
+                }
+            })
         }
     },
 }
