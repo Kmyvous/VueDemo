@@ -15,7 +15,7 @@
         <div class="list">
             <div class="cmt-list" v-for="(item, index) in cmtList" :key="index">
                 <div class="cmt-title">
-                    第{{ index + 1 }}楼&nbsp;&nbsp;用户：{{ item.user_name }}&nbsp;&nbsp;发表时间：{{ item.add_time | dataFormat }}
+                    第{{ index + 1 }}楼&nbsp;&nbsp;用户:{{ item.user_name }}&nbsp;&nbsp;发表时间:{{ item.add_time | dataFormat }}
                 </div>
                 <div class="cmt-content">
                     {{ (item.content === "undefined")||(item.content === "") ? "该用户的评论被官方菌吃掉啦" : item.content }}

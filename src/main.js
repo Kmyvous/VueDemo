@@ -32,10 +32,18 @@ import './lib/dist/css/mui.min.css'
 import './lib/dist/css/icons-extra.css'
 import './lib/dist/fonts/mui-icons-extra.ttf'
 
+
 // 导入自定义的 router 模块
 import router from './route.js'
 
+// 按需导入 vant UI
+import 'vant/lib/index.css';
+import { Tab, Tabs, Skeleton, Lazyload } from 'vant';
+Vue.use(Tab).use(Tabs).use(Skeleton).use(Lazyload);
 
+// 导入 vue-preview 缩略图插件
+import VuePreview from 'vue-preview'
+Vue.use(VuePreview)
 
 // axios 配置全局 根域名
 Vue.axios.defaults.baseURL = 'http://www.liulongbin.top:3005/';
