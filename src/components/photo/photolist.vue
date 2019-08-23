@@ -4,7 +4,9 @@
 			<van-tab v-for="(item) in list" :key="item.id" :title="item.title" :name="item.id">
 				<ul>
 					<router-link tag="li" v-for="(item) in imageList" :key="item.id" :to="'/home/photolist/photoinfo/' + item.id">
-						<img :src="item.img_url" alt="" v-lazy="item.img_url">
+						<van-image :src="item.img_url" alt="" lazy-load v-slot:loading class="vanimg">
+							<van-loading color="#2980b9" size="30" />
+						</van-image>
 						<div class="mask">
 							<h1 class="mask-title">{{ item.title }}</h1>
 							<span class="mask-content">{{ item.zhaiyao }}</span>
@@ -76,7 +78,7 @@ export default {
 		box-sizing: border-box;
 		overflow: hidden;	
 	}
-	ul > li img{
+	ul > li .vanimg{
 		width: 100%;
 		vertical-align: middle
 	}

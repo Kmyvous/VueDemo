@@ -9,7 +9,7 @@
       <div v-html="list.content" class="content"></div>
       
       <!-- 缩略图区域 -->
-      <!-- <vue-preview :slides="img_list" @close="handleClose"></vue-preview> -->
+      <vue-preview :slides="img_list" class="preview"></vue-preview>
 
       <!-- 评论子组件 -->
     <comment :artid="id"></comment>
@@ -30,7 +30,8 @@ export default {
     comment
   },
   created () {
-    this.getImgInfo()
+    this.getImgInfo(),
+    this.getThum()
   },
   methods: {
     getImgInfo(){
@@ -48,6 +49,25 @@ export default {
           })
         }
       })
+    },
+    getThum(){
+      // http://www.liulongbin.top:3005/api/getthumimages/:imgId
+        const _thum = 'api/getthumimages/' + this.id  
+        this.axios(_thum).then(response => {
+          if(response.data.status === 0){
+            response.data.message.forEach(item => {
+              item.w = 600;
+              item.h = 400;
+              item.msrc = item.src
+            })
+            this.img_list = response.data.message;
+          }else{
+            Toast({
+              message: 'error',
+              duration: 2000
+            })
+          }
+        })
     }
   }
 }
@@ -76,6 +96,12 @@ export default {
         margin: 10px;
         font-size: 13px;
         text-indent: 2em;
+    }
+
+    .preview{
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 </style>
