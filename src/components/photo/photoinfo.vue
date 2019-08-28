@@ -56,8 +56,8 @@ export default {
         this.axios(_thum).then(response => {
           if(response.data.status === 0){
             response.data.message.forEach(item => {
-              item.w = 600;
-              item.h = 400;
+              item.w = '100%';
+              item.h = '100%';
               item.msrc = item.src
             })
             this.img_list = response.data.message;

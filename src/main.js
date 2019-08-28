@@ -38,8 +38,22 @@ import router from './route.js'
 
 // 按需导入 vant UI
 import 'vant/lib/index.css';
-import { Tab, Tabs, Skeleton, Lazyload, Loading, Image } from 'vant';
-Vue.use(Tab).use(Tabs).use(Skeleton).use(Lazyload).use(Loading).use(Image);
+import 'vant/lib/icon/local.css';
+import {
+  Tab,
+  Tabs,
+  Skeleton,
+  Lazyload,
+  Loading,
+  Image,
+  GoodsAction,
+  GoodsActionIcon,
+  GoodsActionButton,
+  Divider,
+  Stepper,
+  Icon  
+} from 'vant';
+Vue.use(Tab).use(Tabs).use(Skeleton).use(Lazyload).use(Loading).use(Image).use(GoodsAction).use(GoodsActionIcon).use(GoodsActionButton).use(Divider).use(Stepper).use(Icon)
 
 // 导入 vue-preview 缩略图插件
 import VuePreview from 'vue-preview'
