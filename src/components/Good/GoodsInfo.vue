@@ -52,7 +52,7 @@ export default {
       list: [],
       value: 1,
       goodsInfoList: [],
-      selectdCount: 1
+      selectdCount: 1 // 购买数量
     }
   },
   created(){
@@ -106,11 +106,21 @@ export default {
       Toast ({
         message: '成功加入购物车',
         icon: 'passed',
-        forbidClick: true, 
+        // forbidClick: true, 
       })
+      // 拼接出一个 要保存到 store 中 shoppingCart 的商品信息对象
+      var _goodsInfo = {
+        id: this.imgId,
+        count: this.selectdCount,
+        price: this.goodsInfoList.sell_price,
+        selected: true
+      };
+      this.$store.commit('addToShoppingCart', _goodsInfo);
+      // this.$store.commit('aaaa')
     },
     getCountChanged(count){
       this.selectdCount = count;
+      // console.log(this.selectdCount);
     }
   },
   components: {

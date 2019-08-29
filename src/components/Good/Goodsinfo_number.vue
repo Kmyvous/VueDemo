@@ -1,6 +1,6 @@
 <template>
   <div class="div-container">
-    <van-stepper v-model="num" integer input-width="60px" button-size="30px" @change="countChanged" ref="numbox" min="1" :max="stock_quantity" />
+    <van-stepper v-model="num" integer input-width="60px" button-size="30px" min="1" :max="stock_quantity" @change="countChanged" />
   </div>
 </template>
 <script>

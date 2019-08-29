@@ -62,8 +62,69 @@ Vue.use(VuePreview)
 // axios 配置全局 根域名
 Vue.axios.defaults.baseURL = 'http://www.liulongbin.top:3005/';
 
+//  全局导入 vuex 
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
+var store = new Vuex.Store({
+  /**
+   * 总结：
+   * 1. state 中的数据不能直接修改，如果想要修改，必须通过 mutations 
+   * 2. 如果组件想要直接从 state 上获取数据，需要：this.$store.state.*** ( * 代表的是 state 中的数据 )
+   * 3. 如果组件想要修改数据，必须使用 mutations 提供的方法，需要通过 this.$store.commit('方法名', 唯一参数)
+   * 4. 如果 store 中 state 上的数据，在对外提供使用时，需要做一层包装，那么推荐使用 getters，如果需要使用 getters， 则用 this.$store.getters.*** 的形式 ( * 代表的是 getters 中的方法名 )
+   */
+
+  // state 可以想象成 data
+  state: {
+    shoppingCart: [],
+  },
+  mutations: {
+    aaaa(state){
+      state.ceshi.forEach(item=>{
+        item.coumt += 1;
+      })
+    },
+    addToShoppingCart(state, info){
+      /**
+       * 点击 加入购物车 然后将商品信息保存到 store 中的 shoppingCart 上
+       * 思路：
+       * 1. 如果已经加入过购物车了，只需要更新 商品数量
+       * 2. 如果没有加入过购物车，就需要将 商品数据 push 到 shoppingCart 中
+       */
+      var  flag = false;
+      state.shoppingCart.some(item => {  
+        if(item.id === info.id){
+          item.count += parseInt(info.count);
+          flag = true;
+          return true;
+        }
+      })
+      if(!flag){
+        state.shoppingCart.push(info);
+      }
+    }
+  },
+  getters: {
+    /**
+     * 注意：这里的 getters 只负责对外提供数据，不负责修改数据
+     * 注意：如果想要修改 state 的数据，请在 mutations 中去进行操作
+     * getters 中的所有都是一个 function ，它的第一个参数只能是 state ，
+     * ( 相当于 计算属性，或者 相当于 filters )
+     */
+    getAllCount(state){
+      var num = 0;
+      state.shoppingCart.forEach(item => {
+        num += item.count;
+      })
+      return num;
+    }
+  },
+})
+
 new Vue({
   el: '#app',
   render: c => c(App),
   router,
+  store // 将 Vuex 创建的 store 挂载到 Vue 实例上
 })
