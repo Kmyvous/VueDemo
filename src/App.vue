@@ -1,7 +1,11 @@
 <template>
   <div style="overflow-x:hidden;">
     <!-- 顶部 Header 区域 -->
-    <mt-header fixed title="muvous"></mt-header>
+    <mt-header fixed title="muvous">
+      <span slot="left" @click="toBack" v-show="flag">
+        <mt-button icon="back">返回</mt-button>
+      </span>
+    </mt-header>
 
     <!-- 中间 路由 区域 -->
     <transition name="fade" mode="out-in">
@@ -32,6 +36,38 @@
 
   </div>
 </template>
+<script>
+export default {
+  data(){
+    return {
+      flag: false
+    }
+  },
+  created(){
+    this.flag = ( this.$route.path === '/home' ) ? false : true;
+  },
+  methods: {
+    toBack(){
+      /**
+       * 点击返回上一页面
+       * 使用 路由历史 操作
+       * 注意：返回到首页时，隐藏此按钮
+       */
+      this.$router.go(-1)
+    }
+  },
+  watch:{
+    '$route.path':function(valNow){
+      if(valNow === '/home'){
+        this.flag = false;
+      }
+      else{
+        this.flag = true;
+      }
+    }
+  }
+}
+</script>
 <style scoped>
 
   .margin-content {

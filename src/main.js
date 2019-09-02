@@ -20,12 +20,14 @@ Vue.use(VueAxios, axios)
 import App from './App.vue'
 
 // 按需引入 mint-ui
-import { Header, Swipe, SwipeItem, Button } from 'mint-ui'
+import { Header, Swipe, SwipeItem, Button, Checklist, Switch } from 'mint-ui'
 import 'mint-ui/lib/style.css'
 Vue.component(Header.name, Header)
 Vue.component(Swipe.name, Swipe)
 Vue.component(SwipeItem.name, SwipeItem)
 Vue.component(Button.name, Button)
+Vue.component(Checklist.name, Checklist)
+Vue.component(Switch.name, Switch)
 
 // 按需引入 MUI
 import './lib/dist/css/mui.min.css'
@@ -51,9 +53,12 @@ import {
   GoodsActionButton,
   Divider,
   Stepper,
-  Icon  
+  Icon,
+  Checkbox, CheckboxGroup,Cell,CellGroup
 } from 'vant';
-Vue.use(Tab).use(Tabs).use(Skeleton).use(Lazyload).use(Loading).use(Image).use(GoodsAction).use(GoodsActionIcon).use(GoodsActionButton).use(Divider).use(Stepper).use(Icon)
+Vue.use(Tab).use(Tabs).use(Skeleton).use(Lazyload).use(Loading).use(Image).use(GoodsAction).use(GoodsActionIcon).use(GoodsActionButton).use(Divider).use(Stepper).use(Icon).use(Checkbox).use(CheckboxGroup).use(Cell).use(CellGroup)
+
+
 
 // 导入 vue-preview 缩略图插件
 import VuePreview from 'vue-preview'
@@ -66,6 +71,7 @@ Vue.axios.defaults.baseURL = 'http://www.liulongbin.top:3005/';
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
+var cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]')
 var store = new Vuex.Store({
   /**
    * 总结：
@@ -77,14 +83,9 @@ var store = new Vuex.Store({
 
   // state 可以想象成 data
   state: {
-    shoppingCart: [],
+    shoppingCart: cart
   },
   mutations: {
-    aaaa(state){
-      state.ceshi.forEach(item=>{
-        item.coumt += 1;
-      })
-    },
     addToShoppingCart(state, info){
       /**
        * 点击 加入购物车 然后将商品信息保存到 store 中的 shoppingCart 上
@@ -103,6 +104,39 @@ var store = new Vuex.Store({
       if(!flag){
         state.shoppingCart.push(info);
       }
+      // 更新完了 shoppingCart 之后，将数据保存到 本地存储 localStorage 中，防止刷新网页后，就没有数据的情况
+      localStorage.setItem('shoppingCart', JSON.stringify(state.shoppingCart))
+    },
+    upDataGoodsCount(state, info){
+      state.shoppingCart.forEach(item => {
+        if(item.id === info.id){
+          item.count = parseInt(info.count)
+          return true
+        }
+      })
+      // 修改完了最新的数量之后，还需要重新保存到 shoppingCart 中
+      localStorage.setItem('shoppingCart', JSON.stringify(state.shoppingCart))
+    },
+    removeShopCart(state, id){
+      // 根据 id 删除对应的商品数据
+      state.shoppingCart.some((item, i) => {
+        if(item.id === id){
+          state.shoppingCart.splice(i, 1);
+          console.log('object');
+          return true;
+        }
+      })
+      // 将删除完毕之后的数据同步到本地存储中
+      localStorage.setItem('shoppingCart', JSON.stringify(state.shoppingCart))
+    },
+    selectedChanged(state, info){
+      state.shoppingCart.forEach(item => {
+        if(item.id === info.id){
+          item.selected = info.selected;
+          return true;
+        }
+      })
+      localStorage.setItem('shoppingCart', JSON.stringify(state.shoppingCart))
     }
   },
   getters: {
@@ -118,6 +152,33 @@ var store = new Vuex.Store({
         num += item.count;
       })
       return num;
+    },
+    getGoodsCount(state){
+      var _count = {}
+      state.shoppingCart.forEach(item => {
+        _count[item.id] = item.count
+      })
+      return _count
+    },
+    getSelected(state){
+      var o = {}
+      state.shoppingCart.forEach(item => {
+        o[item.id] = item.selected;
+      })
+      return o;
+    },
+    getGoodsCountAndPrice(state){
+      let o = {
+        count: 0,
+        price: 0
+      };
+      state.shoppingCart.forEach(item => {
+        if(item.selected === true){
+          o.count += item.count;
+          o.price += (item.price * item.count);
+        }
+      })
+      return o;
     }
   },
 })

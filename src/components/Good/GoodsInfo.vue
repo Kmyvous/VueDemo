@@ -116,7 +116,6 @@ export default {
         selected: true
       };
       this.$store.commit('addToShoppingCart', _goodsInfo);
-      // this.$store.commit('aaaa')
     },
     getCountChanged(count){
       this.selectdCount = count;
